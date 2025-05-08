@@ -57,6 +57,38 @@ class JsonManager:
         
         return lastKey in searchSpace
 
+    def get_immidiate_parent_limit(self, key):
+        if not key:
+            raise RuntimeError("Section name must be specified")
+
+        parent_chain = key.split(".")
+        if len(parent_chain) == 1:
+            return settings.LITERAL.INF
+        else:
+            parent = '.'.join(parent_chain[:-1])
+            return self[parent]['limit']
+    
+    def get_propagated_limit_for_child(self, key):
+        if not key:
+            raise RuntimeError("Section name must be specified")
+
+        parent_chain = key.split(".")
+        if len(parent_chain) == 1:
+            try:
+                return self.db[parent_chain[0]]['limit']
+            except KeyError:
+                return settings.LITERAL.INF
+        else:
+            parent = '.'.join(parent_chain[:-1])
+            remaining_limit = self[parent]['limit']
+            
+            for section, value in self[parent].items():
+                if section not in settings.LITERAL.SECTION_CONSTANT_TUPLE:
+                    remaining_limit -= value['limit']
+            
+            return remaining_limit
+            
+
 
 class StorageManager(JsonManager):
     def __init__(self, path: str):
