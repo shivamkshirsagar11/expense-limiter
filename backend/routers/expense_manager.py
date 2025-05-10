@@ -6,7 +6,7 @@ import os
 
 LOGGER = create_logger(os.path.basename(__file__))
 
-router = APIRouter(prefix="/add", tags=["Section"])
+router = APIRouter(prefix="/manager", tags=["Section"])
 
 
 @router.post("/section")
@@ -54,6 +54,7 @@ def remove_section(
                 )
         
         del manager[name]
+        manager.save()
         log_debug_and_info(LOGGER, f"Section {name} deleted from database!")
 
 @router.post("/expense")
@@ -77,6 +78,7 @@ def add_expense_in_section(
                 detail=f"{helper.get_name_parts(name, -1)} is not permitted to go beyond limit of {manager[name]['limit']}"
                 )
         manager[name]['expense'] = expense
+        manager.save()
         LOGGER.info("Expense added in section %s", name)
         
         return {"message": f"Expense added in section {helper.get_name_parts(name, -1)}", "expense": expense}
@@ -112,6 +114,7 @@ def update_expense_in_section(
         )
 
     manager[name]['expense'] = new_expense
+    manager.save()
     LOGGER.info("Expense updated in section %s, new total: %s", name, new_expense)
 
     return {"message": f"Expense updated in section {name}", "new_total": new_expense}

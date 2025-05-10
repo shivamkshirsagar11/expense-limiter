@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.routers import expense_manager
+from routers import expense_manager
 import os
 from utils.logger import create_logger
 

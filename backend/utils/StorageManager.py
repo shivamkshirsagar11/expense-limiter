@@ -26,7 +26,7 @@ class JsonManager:
         return searchSpace
     
     def __setitem__(self, key, value):
-        LOGGER.debug("Setting key=value %s=%s", key, searchSpace)
+        LOGGER.debug("Setting key=value %s=%s", key, value)
         searchSpace = self.db
         *keys, lastKey = [*key.split(".")]
         
@@ -90,7 +90,7 @@ class JsonManager:
         parent_chain = key.split(".")
         if len(parent_chain) == 1:
             LOGGER.debug("%s is root, so just returning it's limit", key)
-            return self[parent_chain[0]]['limit']
+            return self[parent_chain[0]]['limit'] if len(self.db) else settings.LITERAL.INF
         else:
             LOGGER.debug("%s is not root, we will need to calculate ramining amount that can be limit for new section", key)
             parent = '.'.join(parent_chain[:-1])
