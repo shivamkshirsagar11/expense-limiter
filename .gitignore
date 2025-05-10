@@ -179,3 +179,4 @@ cython_debug/
 *test*.py
 *test*.json
 database.json
+*.log
