@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import logging
 import os
 
 load_dotenv()  # Load from .env
@@ -18,5 +19,8 @@ class Settings:
             'limit',
             'expense'
         )
+    class LOGGING:
+        level: int =  logging.DEBUG
+        base_dir: str = "Logs"
 
 settings = Settings()
