@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routers import add_section as add_section_router
+from backend.routers import expense_manager
 
 app = FastAPI()
 
-app.include_router(add_section_router.router)
+app.include_router(expense_manager.router)
